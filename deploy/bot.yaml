@@ -21,6 +21,10 @@ spec:
       containers:
       - name: datkombot
         image: ghcr.io/gameheld/datkombot
+        envFrom:
+          - secretRef:
+              name: datkombot-token
+              optional: false
         resources:
           limits:
             memory: "256Mi"
