@@ -21,3 +21,11 @@ Run the image using
 ```
 docker run -e BOT_TOKEN=... ghcr.io/gameheld/datkombot:latest
 ```
+
+## Using Kubernetes
+
+Deploy the YAML inside `./deploy/` to your cluster:
+
+```
+kubectl create -f ./deploy/bot.yaml
+```
