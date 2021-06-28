@@ -2,7 +2,7 @@
 
 Telegram Bot, which replies "und Sicherheit!" to a message containing "Datenkommunikation" without "und Sicherheit".
 
-# Building
+## Building
 
 Install dependencies and start application
 
@@ -12,4 +12,12 @@ Install dependencies and start application
 pip install -r requirements.txt
 
 python3 datkombot.py
+```
+
+## Using with Docker
+
+Run the image using
+
+```
+docker run -e BOT_TOKEN=... ghcr.io/gameheld/datkombot:latest
 ```
