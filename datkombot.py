@@ -1,27 +1,40 @@
-import telebot
+import os
 import time
 import unicodedata
+import telebot
 
-bot_token = '1090151263:AAF1MqT7ai0gn1uwL9DRYiFKYIL1_uZicDA'
-bot = telebot.TeleBot(token=bot_token)
-cid = 0
+bot_token = os.environ['BOT_TOKEN']
 
 def normalize_caseless(text):
     return unicodedata.normalize("NFKD", text.casefold())
 
-@bot.message_handler(content_types=["text"])
-def handle(message):
-    mid = message.message_id
-    cid = message.chat.id
-    text = normalize_caseless(message.text)
-    if int(text.find(normalize_caseless("Datenkommunikation"))) >= 0 or int(text.find(normalize_caseless("DatKom"))) >= 0 or int(text.find(normalize_caseless("DatKomm"))) >= 0:
-        if int(text.find(normalize_caseless("und Sicherheit"))) < 0:
-            bot.send_message(cid, "und Sicherheit!", reply_to_message_id=mid)
-        else: pass
-    else: pass
+bot = telebot.TeleBot(os.environ['BOT_TOKEN'])
 
-while True:
+trigger_words = [
+    "Datenkommunikation",
+    "Datkom",
+    "Datkomm"
+]
+
+@bot.message_handler(commands=['loesung', 'hilfe', 'help', 'klausur'])
+def send_link(message):
+    """
+    Sends help!
+    """
+    bot.reply_to(message, "Eselsbrücke: https://open.spotify.com/track/72FWIzbWGeZ8w0QsiVJTUo")
+
+@bot.message_handler(content_types=["text"])
+def send_phrase(message):
+    """
+    Responds to all messages containing the trigger words above
+    """
+    text = normalize_caseless(message.text)
+    for trigger in trigger_words:
+        if normalize_caseless(trigger) in text and normalize_caseless("und Sicherheit") not in text:
+            bot.reply_to(message, "und Sicherheit!")
+
+if __name__ == '__main__':
     try:
         bot.polling()
     except Exception:
-        time.sleep(15)
+        exit(1)

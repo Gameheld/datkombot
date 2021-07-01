@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datkombot
+  labels:
+    app.kubernetes.io/name: datkombot
+    app.kubernetes.io/version: 2.0.0
+    app.kubernetes.io/component: bot
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  progressDeadlineSeconds: 300
+  selector:
+    matchLabels:
+      app: datkombot
+  template:
+    metadata:
+      labels:
+        app: datkombot
+    spec:
+      containers:
+      - name: datkombot
+        image: ghcr.io/gameheld/datkombot
+        envFrom:
+          - secretRef:
+              name: datkombot-token
+              optional: false
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 3000
